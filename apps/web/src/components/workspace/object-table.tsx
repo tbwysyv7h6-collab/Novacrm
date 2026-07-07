@@ -16,7 +16,32 @@ import {
   arrayMove,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Plus, GripVertical, MoreHorizontal, Trash2, Pencil } from "lucide-react";
+import {
+  Plus,
+  GripVertical,
+  MoreHorizontal,
+  Trash2,
+  Pencil,
+  Type,
+  AlignLeft,
+  Hash,
+  Coins,
+  ToggleLeft,
+  Calendar,
+  CalendarClock,
+  Mail,
+  Phone,
+  Link as LinkIcon,
+  CircleDot,
+  ListChecks,
+  User,
+  Link2,
+  Paperclip,
+  Sigma,
+  ListOrdered,
+  LayoutGrid,
+  type LucideIcon,
+} from "lucide-react";
 import { trpc } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,11 +52,31 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { FieldFormDialog } from "@/components/workspace/field-form-dialog";
 import { cn } from "@/lib/utils";
-import type { CrmField, CrmObject, CrmRecord } from "@novacrm/db";
+import type { CrmField, CrmObject, CrmRecord, FieldType } from "@novacrm/db";
 import type { RouterOutputs } from "@/lib/trpc/types";
 
 type RecordData = Record<string, unknown>;
 type ObjectWithDetails = RouterOutputs["object"]["get"];
+
+const FIELD_TYPE_ICONS: Record<FieldType, LucideIcon> = {
+  TEXT: Type,
+  LONG_TEXT: AlignLeft,
+  NUMBER: Hash,
+  CURRENCY: Coins,
+  BOOLEAN: ToggleLeft,
+  DATE: Calendar,
+  DATETIME: CalendarClock,
+  EMAIL: Mail,
+  PHONE: Phone,
+  URL: LinkIcon,
+  SELECT: CircleDot,
+  MULTI_SELECT: ListChecks,
+  USER_REF: User,
+  RELATION: Link2,
+  ATTACHMENT: Paperclip,
+  FORMULA: Sigma,
+  AUTO_NUMBER: ListOrdered,
+};
 
 function EditableCell({
   field,
@@ -197,6 +242,7 @@ function SortableHeaderCell({
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: field.id,
   });
+  const TypeIcon = FIELD_TYPE_ICONS[field.type] ?? Type;
 
   return (
     <th
@@ -207,7 +253,7 @@ function SortableHeaderCell({
         isDragging && "opacity-50",
       )}
     >
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1.5">
         <button
           type="button"
           {...attributes}
@@ -217,6 +263,7 @@ function SortableHeaderCell({
         >
           <GripVertical className="size-3.5" />
         </button>
+        <TypeIcon className="size-3.5 shrink-0 text-muted-foreground/70" />
         <span className="flex-1 truncate">
           {field.name}
           {field.isRequired && <span className="text-destructive"> *</span>}
@@ -350,10 +397,24 @@ export function ObjectTable({
         </tbody>
       </table>
       </DndContext>
+
+      {records.length === 0 && (
+        <div className="flex flex-col items-center gap-2 border-t px-6 py-10 text-center">
+          <LayoutGrid className="size-6 text-muted-foreground/50" />
+          <p className="text-sm font-medium">No records yet</p>
+          <p className="text-sm text-muted-foreground">
+            Add your first {object.name.replace(/s$/, "").toLowerCase() || "record"} to get started.
+          </p>
+        </div>
+      )}
+
       <button
         type="button"
         onClick={() => createRecord.mutate({ objectId: object.id, data: {} })}
-        className="flex w-full items-center gap-2 border-t px-3 py-2 text-left text-sm text-muted-foreground hover:bg-muted/30"
+        className={cn(
+          "flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-muted-foreground hover:bg-muted/30",
+          records.length > 0 && "border-t",
+        )}
       >
         <Plus className="size-3.5" />
         New row
