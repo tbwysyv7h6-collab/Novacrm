@@ -52,6 +52,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { FieldFormDialog } from "@/components/workspace/field-form-dialog";
 import { cn } from "@/lib/utils";
+import { colorForChoice } from "@/lib/field-colors";
 import type { CrmField, CrmObject, CrmRecord, FieldType } from "@novacrm/db";
 import type { RouterOutputs } from "@/lib/trpc/types";
 
@@ -103,12 +104,12 @@ function EditableCell({
   );
 
   const baseClass =
-    "w-full min-w-32 truncate border-none bg-transparent px-2 py-1.5 text-sm outline-none focus:bg-muted/60 rounded";
+    "w-full min-w-32 truncate border-none bg-transparent px-2 py-2 text-sm outline-none focus:bg-muted/60 rounded";
 
   switch (field.type) {
     case "BOOLEAN":
       return (
-        <div className="flex justify-center px-2 py-1.5">
+        <div className="flex justify-center px-2 py-2">
           <input
             type="checkbox"
             checked={Boolean(value)}
@@ -127,7 +128,6 @@ function EditableCell({
         />
       );
     case "NUMBER":
-    case "CURRENCY":
       return (
         <input
           type="number"
@@ -135,6 +135,20 @@ function EditableCell({
           onBlur={(e) => onChange(e.target.value === "" ? null : Number(e.target.value))}
           className={baseClass}
         />
+      );
+    case "CURRENCY":
+      return (
+        <div className="relative">
+          <span className="pointer-events-none absolute top-1/2 left-2 -translate-y-1/2 text-sm text-muted-foreground">
+            £
+          </span>
+          <input
+            type="number"
+            defaultValue={typeof value === "number" ? value : ""}
+            onBlur={(e) => onChange(e.target.value === "" ? null : Number(e.target.value))}
+            className={cn(baseClass, "pl-5")}
+          />
+        </div>
       );
     case "DATE":
       return (
@@ -154,21 +168,30 @@ function EditableCell({
           className={baseClass}
         />
       );
-    case "SELECT":
+    case "SELECT": {
+      const selected = typeof value === "string" ? value : "";
       return (
-        <select
-          value={typeof value === "string" ? value : ""}
-          onChange={(e) => onChange(e.target.value || null)}
-          className={cn(baseClass, "appearance-none")}
-        >
-          <option value="" />
-          {(options.choices ?? []).map((choice) => (
-            <option key={choice} value={choice}>
-              {choice}
-            </option>
-          ))}
-        </select>
+        <div className="flex px-2 py-2">
+          <select
+            value={selected}
+            onChange={(e) => onChange(e.target.value || null)}
+            className={cn(
+              "w-fit min-w-16 max-w-full cursor-pointer appearance-none truncate rounded-full border-none text-sm outline-none focus:ring-2 focus:ring-ring/50",
+              selected
+                ? cn("px-2.5 py-0.5 text-xs font-medium", colorForChoice(selected))
+                : "bg-transparent px-1 text-muted-foreground",
+            )}
+          >
+            <option value="" />
+            {(options.choices ?? []).map((choice) => (
+              <option key={choice} value={choice}>
+                {choice}
+              </option>
+            ))}
+          </select>
+        </div>
       );
+    }
     case "MULTI_SELECT":
       return (
         <input
@@ -218,7 +241,7 @@ function EditableCell({
     case "FORMULA":
     case "AUTO_NUMBER":
     case "ATTACHMENT":
-      return <div className="px-2 py-1.5 text-sm text-muted-foreground">—</div>;
+      return <div className="px-2 py-2 text-sm text-muted-foreground">—</div>;
     default:
       return (
         <input
@@ -339,7 +362,7 @@ export function ObjectTable({
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border">
+    <div className="overflow-x-auto rounded-xl border shadow-sm">
       <DndContext
         id={`object-fields-dnd-${object.id}`}
         sensors={sensors}
