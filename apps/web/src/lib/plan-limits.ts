@@ -1,4 +1,4 @@
-export const FREE_PLAN_RECORD_LIMIT = 100;
+export const FREE_PLAN_RECORD_LIMIT = 25;
 
 export function canCreateAdditionalOrg(ownedOrgPlans: string[]): boolean {
   if (ownedOrgPlans.length === 0) return true;

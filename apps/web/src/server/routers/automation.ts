@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import { prisma, type Prisma } from "@novacrm/db";
 import { router, protectedProcedure } from "../trpc";
 import { requireMembership } from "../membership";
@@ -44,6 +45,18 @@ export const automationRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       const object = await assertObjectAccess(ctx.userId, input.objectId);
+
+      const organization = await prisma.organization.findUniqueOrThrow({
+        where: { id: object.organizationId },
+        select: { plan: true },
+      });
+      if (organization.plan === "FREE") {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Automations require the Starter plan or above. Upgrade to start automating.",
+        });
+      }
+
       return prisma.crmAutomation.create({
         data: {
           organizationId: object.organizationId,

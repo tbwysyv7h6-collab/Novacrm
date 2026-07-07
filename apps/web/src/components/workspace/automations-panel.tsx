@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Trash2, Workflow, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { Plus, Trash2, Workflow, ArrowRight, Lock } from "lucide-react";
 import { trpc } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,7 +24,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import type { CrmObject } from "@novacrm/db";
+import type { CrmObject, PlanTier } from "@novacrm/db";
 import type { AutomationAction } from "@/server/automations/run";
 
 const ACTION_TYPES = [
@@ -305,9 +306,11 @@ function CreateAutomationDialog({
 export function AutomationsPanel({
   organizationId,
   objects,
+  plan,
 }: {
   organizationId: string;
   objects: CrmObject[];
+  plan: PlanTier;
 }) {
   const { data: automations = [] } = trpc.automation.list.useQuery({ organizationId });
   const utils = trpc.useUtils();
@@ -323,6 +326,23 @@ export function AutomationsPanel({
       <p className="text-sm text-muted-foreground">
         Create an object first (e.g. Contacts, Jobs) before building automations.
       </p>
+    );
+  }
+
+  if (plan === "FREE") {
+    return (
+      <Card className="flex flex-col items-center gap-3 p-10 text-center">
+        <Lock className="size-6 text-muted-foreground" />
+        <div>
+          <p className="font-medium">Automations are a Starter feature</p>
+          <p className="text-sm text-muted-foreground">
+            Upgrade to Starter or above to start automating IF/THEN workflows.
+          </p>
+        </div>
+        <Button nativeButton={false} render={<Link href={`/app/${organizationId}/settings/billing`} />}>
+          Upgrade to Starter
+        </Button>
+      </Card>
     );
   }
 

@@ -16,7 +16,7 @@ export default async function PublicFormPage({
       object: {
         include: {
           fields: { orderBy: { position: "asc" } },
-          organization: { select: { name: true, brandColor: true, logoUrl: true } },
+          organization: { select: { name: true, brandColor: true, logoUrl: true, plan: true } },
         },
       },
     },
@@ -38,6 +38,14 @@ export default async function PublicFormPage({
           <p className="text-sm text-muted-foreground">{view.object.organization.name}</p>
         </div>
         <PublicFormClient viewId={view.id} fields={publicFields} submitLabel="Submit" />
+        {view.object.organization.plan === "FREE" && (
+          <p className="mt-6 text-center text-xs text-muted-foreground">
+            Powered by{" "}
+            <a href="https://www.novacrm.uk" className="font-medium hover:underline">
+              NovaCRM
+            </a>
+          </p>
+        )}
       </div>
     </div>
   );

@@ -7,10 +7,13 @@ export default async function AutomationsPage({
   params: Promise<{ orgId: string }>;
 }) {
   const { orgId } = await params;
-  const objects = await prisma.crmObject.findMany({
-    where: { organizationId: orgId },
-    orderBy: { name: "asc" },
-  });
+  const [objects, organization] = await Promise.all([
+    prisma.crmObject.findMany({
+      where: { organizationId: orgId },
+      orderBy: { name: "asc" },
+    }),
+    prisma.organization.findUniqueOrThrow({ where: { id: orgId }, select: { plan: true } }),
+  ]);
 
   return (
     <div className="space-y-4">
@@ -20,7 +23,7 @@ export default async function AutomationsPage({
           IF something happens THEN NovaCRM takes care of it — no code required.
         </p>
       </div>
-      <AutomationsPanel organizationId={orgId} objects={objects} />
+      <AutomationsPanel organizationId={orgId} objects={objects} plan={organization.plan} />
     </div>
   );
 }
