@@ -2,6 +2,7 @@ import Link from "next/link";
 import { auth, signOut } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { VerifyEmailBanner } from "@/components/verify-email-banner";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -14,6 +15,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         </Link>
         <div className="flex items-center gap-3">
           <span className="text-sm text-muted-foreground">{session?.user?.email}</span>
+          <ThemeToggle />
           <form
             action={async () => {
               "use server";
