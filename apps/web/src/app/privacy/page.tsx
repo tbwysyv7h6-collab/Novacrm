@@ -19,10 +19,10 @@ export default function PrivacyPolicyPage() {
           data account holders store inside the CRMs they build (&quot;end customers&quot;).
         </p>
         <p>
-          NovaCRM is operated by [Legal entity name], a company registered in [jurisdiction] under
-          company number [company number], with a registered office at [registered address]. If
-          you have questions about this policy, contact us at{" "}
-          <a href="mailto:privacy@novacrm.com">privacy@novacrm.com</a>.
+          NovaCRM is operated by Ethen Beyer, trading as NovaCRM, a sole trader based in England
+          and Wales at 19 Saint Johns Road, East Grinstead. If you have questions about this
+          policy, contact us at{" "}
+          <a href="mailto:hello@novacrm.uk">hello@novacrm.uk</a>.
         </p>
       </LegalSection>
 
@@ -150,7 +150,7 @@ export default function PrivacyPolicyPage() {
         </ul>
         <p>
           To exercise any of these rights, email{" "}
-          <a href="mailto:privacy@novacrm.com">privacy@novacrm.com</a>. We will respond within one
+          <a href="mailto:hello@novacrm.uk">hello@novacrm.uk</a>. We will respond within one
           month, as required by law.
         </p>
       </LegalSection>
@@ -181,7 +181,7 @@ export default function PrivacyPolicyPage() {
       <LegalSection heading="13. Contact us">
         <p>
           Questions about this policy or how we handle your data? Email{" "}
-          <a href="mailto:privacy@novacrm.com">privacy@novacrm.com</a>.
+          <a href="mailto:hello@novacrm.uk">hello@novacrm.uk</a>.
         </p>
       </LegalSection>
     </LegalPage>

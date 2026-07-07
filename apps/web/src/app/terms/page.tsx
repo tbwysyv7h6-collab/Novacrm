@@ -13,8 +13,9 @@ export default function TermsOfServicePage() {
       <LegalSection heading="1. Agreement to these terms">
         <p>
           These Terms of Service (&quot;Terms&quot;) govern your access to and use of NovaCRM, a
-          no-code CRM builder operated by [Legal entity name] (&quot;NovaCRM&quot;, &quot;we&quot;,
-          &quot;us&quot;). By creating an account or using NovaCRM, you agree to these Terms. If
+          no-code CRM builder operated by Ethen Beyer, trading as NovaCRM, a sole trader based in
+          England and Wales (&quot;NovaCRM&quot;, &quot;we&quot;, &quot;us&quot;). By creating an
+          account or using NovaCRM, you agree to these Terms. If
           you are using NovaCRM on behalf of a business, you confirm you have authority to bind
           that business to these Terms.
         </p>
@@ -163,7 +164,7 @@ export default function TermsOfServicePage() {
       <LegalSection heading="16. Contact us">
         <p>
           Questions about these Terms? Email{" "}
-          <a href="mailto:legal@novacrm.com">legal@novacrm.com</a>.
+          <a href="mailto:hello@novacrm.uk">hello@novacrm.uk</a>.
         </p>
       </LegalSection>
     </LegalPage>
