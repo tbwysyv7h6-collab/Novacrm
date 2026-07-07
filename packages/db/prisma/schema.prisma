@@ -1,0 +1,282 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Auth (Auth.js / NextAuth Prisma adapter shape) + tenancy
+// ---------------------------------------------------------------------------
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  passwordHash  String? // null for OAuth-only users
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts    Account[]
+  sessions    Session[]
+  memberships Membership[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+enum PlanTier {
+  FREE
+  STARTER
+  PRO
+  BUSINESS
+  ENTERPRISE
+}
+
+enum MembershipRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+// An Organization is a tenant: one customer's workspace, containing exactly
+// the CRM(s) they've built. Every dynamic-engine row below is scoped to one.
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  logoUrl   String?
+  brandColor String? @default("#6366f1")
+
+  plan               PlanTier @default(FREE)
+  stripeCustomerId   String?  @unique
+  stripeSubscriptionId String? @unique
+  stripePriceId      String?
+  stripeCurrentPeriodEnd DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships Membership[]
+  objects     CrmObject[]
+  webhooks    Webhook[]
+  auditLogs   AuditLog[]
+
+  @@index([stripeCustomerId])
+}
+
+model Membership {
+  id             String         @id @default(cuid())
+  role           MembershipRole @default(OWNER)
+  userId         String
+  organizationId String
+  createdAt      DateTime       @default(now())
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
+  @@index([organizationId])
+}
+
+// ---------------------------------------------------------------------------
+// Dynamic object engine
+//
+// Users don't get fixed "Contact" / "Company" tables — they build their own.
+// So instead of one Postgres table per CRM concept (which would mean a schema
+// migration every time a customer adds a table or field), every user-defined
+// table is a row in CrmObject, every column is a row in CrmField, and every
+// record's data lives as JSONB on CrmRecord keyed by field apiName. Postgres
+// JSONB + GIN indexing keeps this queryable at scale without per-tenant DDL.
+// Built-in templates (e.g. what the AI generator scaffolds) are just rows
+// here like anything else — there is no special-cased "system" schema.
+// ---------------------------------------------------------------------------
+
+enum FieldType {
+  TEXT
+  LONG_TEXT
+  NUMBER
+  CURRENCY
+  BOOLEAN
+  DATE
+  DATETIME
+  EMAIL
+  PHONE
+  URL
+  SELECT
+  MULTI_SELECT
+  USER_REF // reference to a Membership (e.g. "assigned to")
+  RELATION // reference to record(s) in another CrmObject
+  ATTACHMENT
+  FORMULA
+  AUTO_NUMBER
+}
+
+enum ViewType {
+  TABLE
+  KANBAN
+  CALENDAR
+  FORM
+}
+
+model CrmObject {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String // display name, e.g. "Jobs"
+  apiName        String // stable key, e.g. "jobs"
+  icon           String?
+  description    String?
+  isSystem       Boolean  @default(false) // seeded by AI generator / template, still user-editable
+  position       Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  fields       CrmField[]
+  records      CrmRecord[]
+  views        CrmView[]
+  automations  CrmAutomation[]
+
+  @@unique([organizationId, apiName])
+  @@index([organizationId])
+}
+
+model CrmField {
+  id           String    @id @default(cuid())
+  objectId     String
+  name         String // display name, e.g. "Job Status"
+  apiName      String // key inside CrmRecord.data, e.g. "job_status"
+  type         FieldType
+  options      Json? // e.g. select choices, relation target objectId, formula expression
+  isRequired   Boolean   @default(false)
+  defaultValue Json?
+  position     Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  object CrmObject @relation(fields: [objectId], references: [id], onDelete: Cascade)
+
+  @@unique([objectId, apiName])
+  @@index([objectId])
+}
+
+model CrmRecord {
+  id             String   @id @default(cuid())
+  objectId       String
+  organizationId String // denormalized for fast tenant-wide queries/RLS
+  data           Json // { [field.apiName]: value }
+  createdById    String?
+  updatedById    String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  object CrmObject @relation(fields: [objectId], references: [id], onDelete: Cascade)
+
+  @@index([objectId])
+  @@index([organizationId])
+}
+
+model CrmView {
+  id        String   @id @default(cuid())
+  objectId  String
+  name      String
+  type      ViewType @default(TABLE)
+  config    Json? // filters, sort, visible fields, group-by, kanban stage field, etc.
+  position  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  object CrmObject @relation(fields: [objectId], references: [id], onDelete: Cascade)
+
+  @@index([objectId])
+}
+
+enum AutomationTrigger {
+  RECORD_CREATED
+  RECORD_UPDATED
+}
+
+// actions is an ordered array of { type: "SEND_EMAIL" | "CREATE_TASK" | "UPDATE_FIELD" | "ASSIGN_USER" | "SEND_REMINDER", config: {...} }
+model CrmAutomation {
+  id             String            @id @default(cuid())
+  organizationId String
+  objectId       String
+  name           String
+  isActive       Boolean           @default(true)
+  trigger        AutomationTrigger
+  conditions     Json? // optional [{ fieldApiName, operator, value }]
+  actions        Json
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  object CrmObject @relation(fields: [objectId], references: [id], onDelete: Cascade)
+
+  @@index([objectId])
+  @@index([organizationId])
+}
+
+model Webhook {
+  id             String   @id @default(cuid())
+  organizationId String
+  url            String
+  secret         String
+  events         String[] // e.g. ["record.created", "record.updated"]
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+}
+
+// action is a dotted event name, e.g. "organization.branding_updated", "billing.plan_changed"
+model AuditLog {
+  id             String   @id @default(cuid())
+  organizationId String
+  userId         String?
+  action         String
+  metadata       Json?
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, createdAt])
+}

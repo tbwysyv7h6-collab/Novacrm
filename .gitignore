@@ -1,0 +1,34 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# next.js
+.next/
+out/
+
+# turbo
+.turbo/
+
+# env
+.env
+.env*.local
+
+# prisma
+packages/db/generated/
+
+# build
+dist/
+build/
+
+# misc
+.DS_Store
+*.pem
+.vercel
+
+# logs
+npm-debug.log*
+pnpm-debug.log*
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
