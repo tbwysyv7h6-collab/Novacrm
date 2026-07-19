@@ -50,18 +50,18 @@ export async function sendVerificationEmail(email: string, verifyUrl: string) {
   );
 }
 
-export async function sendDemoRequestEmail(details: {
+export async function sendContactRequestEmail(details: {
   name: string;
   email: string;
   businessName: string;
   message: string;
 }) {
-  const notifyTo = process.env.DEMO_REQUEST_TO ?? "hello@novacrm.uk";
-  const text = `New demo request\n\nName: ${details.name}\nEmail: ${details.email}\nBusiness: ${details.businessName}\n\n${details.message}`;
+  const notifyTo = process.env.CONTACT_REQUEST_TO ?? "hello@novacrm.uk";
+  const text = `New contact request\n\nName: ${details.name}\nEmail: ${details.email}\nBusiness: ${details.businessName}\n\n${details.message}`;
   await sendEmail(
     notifyTo,
-    `Demo request: ${details.businessName}`,
-    `<p><strong>New demo request</strong></p>
+    `Contact request: ${details.businessName}`,
+    `<p><strong>New contact request</strong></p>
      <p>Name: ${details.name}<br />
      Email: ${details.email}<br />
      Business: ${details.businessName}</p>

@@ -2,10 +2,10 @@
 
 import { headers } from "next/headers";
 import { z } from "zod";
-import { sendDemoRequestEmail } from "@/lib/mail";
+import { sendContactRequestEmail } from "@/lib/mail";
 import { checkRateLimit } from "@/server/rate-limit";
 
-const demoRequestSchema = z.object({
+const contactRequestSchema = z.object({
   name: z.string().trim().min(1).max(100),
   email: z.string().trim().toLowerCase().email(),
   businessName: z.string().trim().min(1).max(100),
@@ -19,16 +19,16 @@ async function getClientIp(): Promise<string> {
   return headerList.get("x-real-ip") ?? "unknown";
 }
 
-export async function submitDemoRequest(
+export async function submitContactRequest(
   formData: FormData,
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   const ip = await getClientIp();
-  const rateLimit = checkRateLimit(`demo-request:${ip}`, 5, 15 * 60 * 1000);
+  const rateLimit = checkRateLimit(`contact-request:${ip}`, 5, 15 * 60 * 1000);
   if (!rateLimit.allowed) {
     return { ok: false, error: "Too many requests. Please try again later." };
   }
 
-  const parsed = demoRequestSchema.safeParse({
+  const parsed = contactRequestSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
     businessName: formData.get("businessName"),
@@ -39,7 +39,7 @@ export async function submitDemoRequest(
     return { ok: false, error: firstIssue?.message ?? "Please check your details and try again." };
   }
 
-  await sendDemoRequestEmail({
+  await sendContactRequestEmail({
     name: parsed.data.name,
     email: parsed.data.email,
     businessName: parsed.data.businessName,

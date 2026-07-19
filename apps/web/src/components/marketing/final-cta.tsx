@@ -23,7 +23,7 @@ export function FinalCta() {
             <ArrowRight className="size-4" />
           </Button>
           <Button size="lg" variant="outline" nativeButton={false} render={<Link href="/demo" />}>
-            Book a demo
+            See live demo
           </Button>
         </div>
       </div>

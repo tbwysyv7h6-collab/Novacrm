@@ -126,7 +126,7 @@ export function PricingSection() {
 
         <p className="mt-8 text-center text-sm text-muted-foreground">
           Need advanced security, SSO, or custom contracts?{" "}
-          <Link href="/demo" className="font-medium text-foreground hover:underline">
+          <Link href="/contact" className="font-medium text-foreground hover:underline">
             Talk to us about Enterprise
           </Link>
           .

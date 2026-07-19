@@ -38,7 +38,7 @@ export function SiteHeader() {
             nativeButton={false}
             render={<Link href="/demo" />}
           >
-            Book a demo
+            See live demo
           </Button>
           <Button
             variant="ghost"

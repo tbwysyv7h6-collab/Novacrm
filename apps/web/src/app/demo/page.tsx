@@ -1,30 +1,36 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { prisma } from "@novacrm/db";
 import { SiteHeader } from "@/components/marketing/site-header";
 import { SiteFooter } from "@/components/marketing/site-footer";
-import { Card } from "@/components/ui/card";
-import { DemoForm } from "./demo-form";
+import { DemoExplorer } from "./demo-explorer";
 
 export const metadata: Metadata = {
-  title: "Book a Demo",
-  description: "See NovaCRM built around your business in a live 20-minute walkthrough.",
+  title: "Live Demo",
+  description: "Explore a real NovaCRM workspace — no signup required.",
 };
 
-export default function DemoPage() {
+export default async function DemoPage() {
+  const organization = await prisma.organization.findUnique({
+    where: { slug: "demo" },
+    include: {
+      objects: {
+        orderBy: { position: "asc" },
+        include: {
+          fields: { orderBy: { position: "asc" } },
+          views: { orderBy: { position: "asc" } },
+          records: { orderBy: { createdAt: "asc" }, take: 25 },
+        },
+      },
+    },
+  });
+
+  if (!organization) notFound();
+
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto flex max-w-lg flex-col items-center px-6 py-20">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Book a demo</h1>
-          <p className="mt-3 text-muted-foreground">
-            Tell us a bit about your business and we&apos;ll walk you through a NovaCRM built
-            around exactly how you work — no obligation.
-          </p>
-        </div>
-        <Card className="w-full p-6">
-          <DemoForm />
-        </Card>
-      </main>
+      <DemoExplorer organization={organization} />
       <SiteFooter />
     </>
   );
