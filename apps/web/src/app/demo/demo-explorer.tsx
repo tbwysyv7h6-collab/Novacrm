@@ -296,6 +296,11 @@ export function DemoExplorer({ organization }: { organization: OrganizationWithO
             ))}
           </p>
         </div>
+        <p className="mx-auto mt-2 max-w-6xl text-xs text-muted-foreground">
+          Every object type on the left (Customers, Jobs, Quotes, and so on) is available on every
+          plan — plans differ in automations, records per table, and branding, not what you can
+          build.
+        </p>
       </div>
 
       <div className="mx-auto flex w-full max-w-6xl flex-1 gap-6 px-6 py-8">
