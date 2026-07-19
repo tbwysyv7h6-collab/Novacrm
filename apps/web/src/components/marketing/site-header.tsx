@@ -32,6 +32,15 @@ export function SiteHeader() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <Button
+            variant="outline"
+            size="sm"
+            className="hidden sm:inline-flex"
+            nativeButton={false}
+            render={<Link href="/demo" />}
+          >
+            Book a demo
+          </Button>
+          <Button
             variant="ghost"
             size="sm"
             nativeButton={false}

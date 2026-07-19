@@ -54,6 +54,12 @@ export const billingRouter = router({
         mode: "subscription",
         customer: customerId,
         line_items: [{ price: priceId, quantity: 1 }],
+        subscription_data: {
+          // Only first-time subscribers get a trial - Stripe won't grant a second
+          // trial to a customer with prior subscription history anyway, but being
+          // explicit avoids relying on that implicit behaviour.
+          trial_period_days: organization.stripeSubscriptionId ? undefined : 14,
+        },
         success_url: `${siteUrl()}/app/${organization.id}/settings/billing?checkout=success`,
         cancel_url: `${siteUrl()}/app/${organization.id}/settings/billing?checkout=cancelled`,
         client_reference_id: organization.id,

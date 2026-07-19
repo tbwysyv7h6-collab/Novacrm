@@ -20,6 +20,7 @@ const plans = [
     period: "/month",
     description: "For freelancers and small teams.",
     features: [
+      "14-day free trial",
       "Unlimited records",
       "Remove branding",
       "Basic automations",
@@ -34,6 +35,7 @@ const plans = [
     period: "/month",
     description: "For growing service businesses.",
     features: [
+      "14-day free trial",
       "Multiple CRMs",
       "Advanced automations",
       "Team collaboration",
@@ -50,6 +52,7 @@ const plans = [
     period: "/month",
     description: "For teams that need control at scale.",
     features: [
+      "14-day free trial",
       "Unlimited users",
       "Advanced permissions",
       "White label",
@@ -71,6 +74,9 @@ export function PricingSection() {
           </h2>
           <p className="mt-4 text-muted-foreground">
             Start free. Upgrade when your CRM starts doing real work.
+          </p>
+          <p className="mt-2 text-sm font-medium text-primary">
+            Every paid plan includes a 14-day free trial — cancel anytime, no charge until it ends.
           </p>
         </div>
 
@@ -120,7 +126,7 @@ export function PricingSection() {
 
         <p className="mt-8 text-center text-sm text-muted-foreground">
           Need advanced security, SSO, or custom contracts?{" "}
-          <Link href="/contact" className="font-medium text-foreground hover:underline">
+          <Link href="/demo" className="font-medium text-foreground hover:underline">
             Talk to us about Enterprise
           </Link>
           .

@@ -3,6 +3,7 @@ import Script from "next/script";
 import { SiteHeader } from "@/components/marketing/site-header";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { Hero } from "@/components/marketing/hero";
+import { BenefitsStrip } from "@/components/marketing/benefits-strip";
 import { AudienceStrip } from "@/components/marketing/audience-strip";
 import { AiBuilderSection } from "@/components/marketing/ai-builder-section";
 import { BuilderSection } from "@/components/marketing/builder-section";
@@ -69,6 +70,7 @@ export default function Home() {
       <SiteHeader />
       <main className="flex-1">
         <Hero />
+        <BenefitsStrip />
         <AudienceStrip />
         <AiBuilderSection />
         <BuilderSection />

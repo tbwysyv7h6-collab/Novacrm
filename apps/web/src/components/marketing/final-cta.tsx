@@ -17,10 +17,13 @@ export function FinalCta() {
           No code. No developers. No compromise. Just describe your business, or
           start dragging and dropping.
         </p>
-        <div className="mt-8 flex justify-center">
+        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Button size="lg" nativeButton={false} render={<Link href="/register" />}>
             Start building for free
             <ArrowRight className="size-4" />
+          </Button>
+          <Button size="lg" variant="outline" nativeButton={false} render={<Link href="/demo" />}>
+            Book a demo
           </Button>
         </div>
       </div>
