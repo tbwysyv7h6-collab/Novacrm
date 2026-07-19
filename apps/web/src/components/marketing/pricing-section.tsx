@@ -3,66 +3,7 @@ import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-
-const plans = [
-  {
-    name: "Free",
-    price: "£0",
-    period: "forever",
-    description: "Try NovaCRM with no commitment.",
-    features: ["1 CRM", "Limited records", "NovaCRM branding", "Basic features"],
-    cta: "Start for free",
-    href: "/register",
-  },
-  {
-    name: "Starter",
-    price: "£19",
-    period: "/month",
-    description: "For freelancers and small teams.",
-    features: [
-      "14-day free trial",
-      "Unlimited records",
-      "Remove branding",
-      "Basic automations",
-      "Email support",
-    ],
-    cta: "Start with Starter",
-    href: "/register?plan=starter",
-  },
-  {
-    name: "Pro",
-    price: "£49",
-    period: "/month",
-    description: "For growing service businesses.",
-    features: [
-      "14-day free trial",
-      "Multiple CRMs",
-      "Advanced automations",
-      "Team collaboration",
-      "API access",
-      "Integrations",
-    ],
-    cta: "Start with Pro",
-    href: "/register?plan=pro",
-    highlighted: true,
-  },
-  {
-    name: "Business",
-    price: "£99",
-    period: "/month",
-    description: "For teams that need control at scale.",
-    features: [
-      "14-day free trial",
-      "Unlimited users",
-      "Advanced permissions",
-      "White label",
-      "Priority support",
-      "Advanced analytics",
-    ],
-    cta: "Start with Business",
-    href: "/register?plan=business",
-  },
-];
+import { PLANS as plans } from "@/lib/plans";
 
 export function PricingSection() {
   return (
