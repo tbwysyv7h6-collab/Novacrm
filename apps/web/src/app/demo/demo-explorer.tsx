@@ -303,8 +303,8 @@ export function DemoExplorer({ organization }: { organization: OrganizationWithO
         </p>
       </div>
 
-      <div className="mx-auto flex w-full max-w-6xl flex-1 gap-6 px-6 py-8">
-        <aside className="w-48 shrink-0 space-y-4">
+      <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-6 py-8 sm:flex-row">
+        <aside className="w-full shrink-0 space-y-4 sm:w-48">
           <div className="space-y-1">
             <p className="mb-2 px-2 text-xs font-medium tracking-wide text-muted-foreground uppercase">
               Objects

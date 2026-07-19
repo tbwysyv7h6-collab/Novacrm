@@ -23,7 +23,8 @@
         "STRIPE_PRICE_BUSINESS",
         "ANTHROPIC_API_KEY",
         "RESEND_API_KEY",
-        "EMAIL_FROM"
+        "EMAIL_FROM",
+        "CONTACT_REQUEST_TO"
       ]
     },
     "dev": {
