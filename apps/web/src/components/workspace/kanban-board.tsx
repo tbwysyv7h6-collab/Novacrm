@@ -1,6 +1,7 @@
 "use client";
 
 import { DndContext, useDraggable, useDroppable, type DragEndEvent } from "@dnd-kit/core";
+import { motion } from "motion/react";
 import { trpc } from "@/lib/trpc/client";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -10,7 +11,15 @@ type RecordData = Record<string, unknown>;
 
 const UNASSIGNED = "__unassigned__";
 
-function KanbanCard({ record, titleField }: { record: CrmRecord; titleField?: CrmField }) {
+function KanbanCard({
+  record,
+  titleField,
+  index,
+}: {
+  record: CrmRecord;
+  titleField?: CrmField;
+  index: number;
+}) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: record.id,
   });
@@ -18,10 +27,13 @@ function KanbanCard({ record, titleField }: { record: CrmRecord; titleField?: Cr
   const title = titleField ? String(data[titleField.apiName] ?? "Untitled") : record.id;
 
   return (
-    <div
+    <motion.div
       ref={setNodeRef}
       {...attributes}
       {...listeners}
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2, delay: Math.min(index * 0.03, 0.25) }}
       style={
         transform
           ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`, zIndex: 10 }
@@ -29,8 +41,10 @@ function KanbanCard({ record, titleField }: { record: CrmRecord; titleField?: Cr
       }
       className={cn("touch-none", isDragging && "opacity-50")}
     >
-      <Card className="cursor-grab p-3 text-sm shadow-sm">{title}</Card>
-    </div>
+      <Card className="cursor-grab p-3 text-sm shadow-sm transition-all duration-150 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
+        {title}
+      </Card>
+    </motion.div>
   );
 }
 
@@ -39,20 +53,25 @@ function KanbanColumn({
   label,
   records,
   titleField,
+  index,
 }: {
   id: string;
   label: string;
   records: CrmRecord[];
   titleField?: CrmField;
+  index: number;
 }) {
   const { setNodeRef, isOver } = useDroppable({ id });
 
   return (
-    <div
+    <motion.div
       ref={setNodeRef}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25, delay: index * 0.05 }}
       className={cn(
-        "flex w-64 shrink-0 flex-col gap-2 rounded-lg border bg-muted/20 p-3",
-        isOver && "ring-2 ring-primary/40",
+        "flex w-64 shrink-0 flex-col gap-2 rounded-xl border bg-muted/20 p-3 shadow-sm transition-shadow duration-200",
+        isOver && "ring-2 ring-primary/40 shadow-md",
       )}
     >
       <div className="flex items-center justify-between px-1">
@@ -60,11 +79,11 @@ function KanbanColumn({
         <span className="text-xs text-muted-foreground">{records.length}</span>
       </div>
       <div className="flex flex-col gap-2">
-        {records.map((record) => (
-          <KanbanCard key={record.id} record={record} titleField={titleField} />
+        {records.map((record, i) => (
+          <KanbanCard key={record.id} record={record} titleField={titleField} index={i} />
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -113,13 +132,14 @@ export function KanbanBoard({
   return (
     <DndContext id={`kanban-${view.id}`} onDragEnd={handleDragEnd}>
       <div className="flex gap-3 overflow-x-auto pb-2">
-        {columns.map((choice) => (
+        {columns.map((choice, index) => (
           <KanbanColumn
             key={choice}
             id={choice}
             label={choice === UNASSIGNED ? "No status" : choice}
             records={recordsFor(choice)}
             titleField={titleField}
+            index={index}
           />
         ))}
       </div>

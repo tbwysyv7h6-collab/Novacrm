@@ -128,3 +128,23 @@
     @apply font-sans;
   }
 }
+
+@keyframes shimmer-accent {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.shimmer-accent {
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklch, var(--primary) 70%, transparent),
+    color-mix(in oklch, var(--primary) 20%, transparent),
+    color-mix(in oklch, var(--primary) 70%, transparent)
+  );
+  background-size: 200% 100%;
+  animation: shimmer-accent 4s linear infinite;
+}

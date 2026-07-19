@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "motion/react";
 import {
   DndContext,
   closestCenter,
@@ -272,7 +273,7 @@ function SortableHeaderCell({
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
       className={cn(
-        "group sticky top-0 min-w-32 border-b bg-muted/40 px-2 py-2 text-left text-xs font-medium text-muted-foreground",
+        "group sticky top-0 min-w-32 border-b bg-muted/60 px-2 py-2 text-left text-xs font-medium text-muted-foreground backdrop-blur-sm transition-colors duration-200",
         isDragging && "opacity-50",
       )}
     >
@@ -281,12 +282,12 @@ function SortableHeaderCell({
           type="button"
           {...attributes}
           {...listeners}
-          className="cursor-grab touch-none opacity-0 group-hover:opacity-100"
+          className="cursor-grab touch-none opacity-0 transition-opacity duration-150 group-hover:opacity-100"
           aria-label="Reorder field"
         >
           <GripVertical className="size-3.5" />
         </button>
-        <TypeIcon className="size-3.5 shrink-0 text-muted-foreground/70" />
+        <TypeIcon className="size-3.5 shrink-0 text-primary/70 transition-colors duration-200 group-hover:text-primary" />
         <span className="flex-1 truncate">
           {field.name}
           {field.isRequired && <span className="text-destructive"> *</span>}
@@ -362,7 +363,9 @@ export function ObjectTable({
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border shadow-sm">
+    <div className="overflow-hidden rounded-xl border shadow-sm">
+      <div className="shimmer-accent h-[2px] w-full" aria-hidden />
+      <div className="overflow-x-auto">
       <DndContext
         id={`object-fields-dnd-${object.id}`}
         sensors={sensors}
@@ -381,17 +384,29 @@ export function ObjectTable({
                     onDelete={() => deleteField.mutate({ fieldId: field.id })}
                   />
                 ))}
-                <th className="sticky top-0 border-b bg-muted/40 px-2 py-2">
-                  <Button variant="ghost" size="icon-xs" onClick={() => setAddingField(true)} aria-label="Add field">
-                    <Plus className="size-3.5" />
+                <th className="sticky top-0 border-b bg-muted/60 px-2 py-2 backdrop-blur-sm">
+                  <Button
+                    variant="ghost"
+                    size="icon-xs"
+                    className="group/add"
+                    onClick={() => setAddingField(true)}
+                    aria-label="Add field"
+                  >
+                    <Plus className="size-3.5 transition-transform duration-200 group-hover/add:rotate-90 group-hover/add:text-primary" />
                   </Button>
                 </th>
               </tr>
             </SortableContext>
         </thead>
         <tbody>
-          {records.map((record) => (
-            <tr key={record.id} className="group border-b last:border-0 hover:bg-muted/20">
+          {records.map((record, index) => (
+            <motion.tr
+              key={record.id}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.25, delay: Math.min(index * 0.03, 0.3) }}
+              className="group border-b transition-colors duration-150 last:border-0 hover:bg-primary/5"
+            >
               {fields.map((field) => (
                 <td key={field.id} className="border-r last:border-0">
                   <EditableCell
@@ -408,14 +423,14 @@ export function ObjectTable({
                 <Button
                   variant="ghost"
                   size="icon-xs"
-                  className="opacity-0 group-hover:opacity-100"
+                  className="opacity-0 transition-opacity duration-150 group-hover:opacity-100"
                   aria-label="Delete row"
                   onClick={() => deleteRecord.mutate({ recordId: record.id })}
                 >
                   <Trash2 className="size-3.5 text-muted-foreground" />
                 </Button>
               </td>
-            </tr>
+            </motion.tr>
           ))}
         </tbody>
       </table>
@@ -423,11 +438,18 @@ export function ObjectTable({
 
       {records.length === 0 && (
         <div className="flex flex-col items-center gap-2 border-t px-6 py-10 text-center">
-          <LayoutGrid className="size-6 text-muted-foreground/50" />
-          <p className="text-sm font-medium">No records yet</p>
-          <p className="text-sm text-muted-foreground">
-            Add your first {object.name.replace(/s$/, "").toLowerCase() || "record"} to get started.
-          </p>
+          <motion.div
+            animate={{ y: [0, -6, 0] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <LayoutGrid className="size-6 text-primary/50" />
+          </motion.div>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+            <p className="text-sm font-medium">No records yet</p>
+            <p className="text-sm text-muted-foreground">
+              Add your first {object.name.replace(/s$/, "").toLowerCase() || "record"} to get started.
+            </p>
+          </motion.div>
         </div>
       )}
 
@@ -435,13 +457,14 @@ export function ObjectTable({
         type="button"
         onClick={() => createRecord.mutate({ objectId: object.id, data: {} })}
         className={cn(
-          "flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-muted-foreground hover:bg-muted/30",
+          "group/newrow flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-muted-foreground transition-colors duration-150 hover:bg-primary/5 hover:text-primary",
           records.length > 0 && "border-t",
         )}
       >
-        <Plus className="size-3.5" />
+        <Plus className="size-3.5 transition-transform duration-200 group-hover/newrow:rotate-90" />
         New row
       </button>
+      </div>
 
       {addingField && (
         <FieldFormDialog
