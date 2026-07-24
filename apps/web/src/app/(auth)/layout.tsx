@@ -4,7 +4,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-muted/30 px-4 py-12">
       <Link href="/" className="mb-8 text-lg font-semibold tracking-tight">
-        Nova<span className="text-primary">CRM</span>
+        Valens<span className="text-primary">CRM</span>
       </Link>
       <div className="w-full max-w-sm">{children}</div>
     </div>

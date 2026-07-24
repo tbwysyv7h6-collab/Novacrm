@@ -11,7 +11,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     <div className="flex min-h-screen flex-col">
       <header className="flex items-center justify-between border-b px-6 py-3">
         <Link href="/app" className="text-lg font-semibold tracking-tight">
-          Nova<span className="text-primary">CRM</span>
+          Valens<span className="text-primary">CRM</span>
         </Link>
         <div className="flex items-center gap-3">
           <span className="text-sm text-muted-foreground">{session?.user?.email}</span>

@@ -12,9 +12,9 @@ import { PricingSection } from "@/components/marketing/pricing-section";
 import { FinalCta } from "@/components/marketing/final-cta";
 
 export const metadata: Metadata = {
-  title: "NovaCRM — Build a Custom CRM in Minutes, No Code Required",
+  title: "ValensCRM — Build a Custom CRM in Minutes, No Code Required",
   description:
-    "NovaCRM is the easiest CRM builder in the world. Drag-and-drop your own custom CRM, or describe your business and let AI build it for you. Made for tradespeople, agencies, and service businesses.",
+    "ValensCRM is the easiest CRM builder in the world. Drag-and-drop your own custom CRM, or describe your business and let AI build it for you. Made for tradespeople, agencies, and service businesses.",
   keywords: [
     "CRM Builder",
     "Build a CRM",
@@ -26,15 +26,15 @@ export const metadata: Metadata = {
     "No-code CRM",
   ],
   openGraph: {
-    title: "NovaCRM — Build a Custom CRM in Minutes, No Code Required",
+    title: "ValensCRM — Build a Custom CRM in Minutes, No Code Required",
     description:
       "Drag-and-drop your own custom CRM, or describe your business and let AI build it for you.",
     type: "website",
-    siteName: "NovaCRM",
+    siteName: "ValensCRM",
   },
   twitter: {
     card: "summary_large_image",
-    title: "NovaCRM — Build a Custom CRM in Minutes, No Code Required",
+    title: "ValensCRM — Build a Custom CRM in Minutes, No Code Required",
     description:
       "Drag-and-drop your own custom CRM, or describe your business and let AI build it for you.",
   },
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "NovaCRM",
+  name: "ValensCRM",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   description:

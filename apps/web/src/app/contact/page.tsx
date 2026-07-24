@@ -6,7 +6,7 @@ import { ContactForm } from "./contact-form";
 
 export const metadata: Metadata = {
   title: "Contact Us",
-  description: "Questions about NovaCRM, Enterprise plans, or custom contracts? Get in touch.",
+  description: "Questions about ValensCRM, Enterprise plans, or custom contracts? Get in touch.",
 };
 
 export default function ContactPage() {

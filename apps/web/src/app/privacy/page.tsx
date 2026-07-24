@@ -3,7 +3,7 @@ import { LegalPage, LegalSection } from "@/components/legal/legal-page";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "How NovaCRM collects, uses, and protects your data.",
+  description: "How ValensCRM collects, uses, and protects your data.",
 };
 
 export default function PrivacyPolicyPage() {
@@ -11,7 +11,7 @@ export default function PrivacyPolicyPage() {
     <LegalPage title="Privacy Policy" lastUpdated="3 July 2026">
       <LegalSection heading="1. Who we are">
         <p>
-          NovaCRM (&quot;NovaCRM&quot;, &quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) provides a
+          ValensCRM (&quot;ValensCRM&quot;, &quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) provides a
           no-code CRM builder that lets businesses design their own customer relationship
           management system. This policy explains what personal data we collect, why, and what
           rights you have over it. It applies to visitors of our website, users of our
@@ -19,7 +19,7 @@ export default function PrivacyPolicyPage() {
           data account holders store inside the CRMs they build (&quot;end customers&quot;).
         </p>
         <p>
-          NovaCRM is operated by Ethen Beyer, trading as NovaCRM, a sole trader based in England
+          ValensCRM is operated by Ethen Beyer, trading as ValensCRM, a sole trader based in England
           and Wales at 19 Saint Johns Road, East Grinstead. If you have questions about this
           policy, contact us at{" "}
           <a href="mailto:hello@novacrm.uk">hello@novacrm.uk</a>.
@@ -35,7 +35,7 @@ export default function PrivacyPolicyPage() {
           </li>
           <li>
             <strong>Workspace data:</strong> the organisations, objects, fields, records, views,
-            automations, and dashboards you create inside NovaCRM — including any customer or
+            automations, and dashboards you create inside ValensCRM — including any customer or
             business data you choose to store there.
           </li>
           <li>
@@ -55,8 +55,8 @@ export default function PrivacyPolicyPage() {
           </li>
         </ul>
         <p>
-          Where you use NovaCRM to store data about your own customers (an &quot;end
-          customer&quot;), you — not NovaCRM — are the data controller for that data, and NovaCRM
+          Where you use ValensCRM to store data about your own customers (an &quot;end
+          customer&quot;), you — not ValensCRM — are the data controller for that data, and ValensCRM
           acts as a data processor on your instructions. You are responsible for having a lawful
           basis to collect and store that data and for honouring any rights requests your end
           customers make to you directly.
@@ -65,7 +65,7 @@ export default function PrivacyPolicyPage() {
 
       <LegalSection heading="3. How we use your data">
         <ul>
-          <li>To provide, maintain, and secure the NovaCRM service.</li>
+          <li>To provide, maintain, and secure the ValensCRM service.</li>
           <li>To process payments and manage subscriptions via Stripe.</li>
           <li>To send essential account emails (email verification, password reset, automation notifications you configure).</li>
           <li>To respond to support requests.</li>
@@ -119,7 +119,7 @@ export default function PrivacyPolicyPage() {
       <LegalSection heading="7. Data retention">
         <p>
           We retain account and workspace data for as long as your account is active. If you
-          delete an object, field, or record inside NovaCRM, it is removed from our production
+          delete an object, field, or record inside ValensCRM, it is removed from our production
           database; backups are retained for a limited period (typically 30 days) before being
           purged. If you close your account, we delete your workspace data within 90 days, except
           where we must retain billing records for legal or tax purposes.
@@ -165,7 +165,7 @@ export default function PrivacyPolicyPage() {
 
       <LegalSection heading="11. Children's privacy">
         <p>
-          NovaCRM is intended for business use and is not directed at children. We do not
+          ValensCRM is intended for business use and is not directed at children. We do not
           knowingly collect personal data from anyone under 16. If you believe a child has
           provided us with personal data, contact us and we will delete it.
         </p>

@@ -169,7 +169,7 @@ function BrandingBadge({ organization }: { organization: Organization }) {
       href={`/app/${organization.id}/settings/billing`}
       className="rounded-md border border-dashed px-2 py-2 text-center text-xs text-muted-foreground hover:text-foreground"
     >
-      Powered by NovaCRM — <span className="underline">upgrade to remove</span>
+      Powered by ValensCRM — <span className="underline">upgrade to remove</span>
     </Link>
   );
 }

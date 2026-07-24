@@ -33,7 +33,7 @@ export function AiBuilderSection() {
         <Card className="flex flex-col justify-center gap-4 p-8">
           <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
             <Sparkles className="size-4 text-primary" />
-            Tell NovaCRM about your business
+            Tell ValensCRM about your business
           </div>
           <div className="rounded-xl border border-border/60 bg-muted/40 p-5 text-lg leading-relaxed">
             &ldquo;I own a window cleaning business with 3 employees.&rdquo;

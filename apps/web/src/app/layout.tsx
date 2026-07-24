@@ -19,8 +19,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: {
-    default: "NovaCRM — The Easiest CRM Builder in the World",
-    template: "%s | NovaCRM",
+    default: "ValensCRM — The Easiest CRM Builder in the World",
+    template: "%s | ValensCRM",
   },
   description:
     "Build a fully custom CRM in minutes, no code required. Drag-and-drop tables, pipelines, automations, and an AI CRM Builder that sets everything up for you.",

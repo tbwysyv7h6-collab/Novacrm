@@ -1,4 +1,4 @@
-# NovaCRM
+# ValensCRM
 
 The easiest CRM builder in the world. Build a fully custom CRM with drag-and-drop, or describe your business and let AI build it for you.
 

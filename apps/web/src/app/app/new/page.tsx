@@ -33,7 +33,7 @@ export default function AiBuilderPage() {
         </div>
         <h1 className="text-2xl font-semibold tracking-tight">AI CRM Builder</h1>
         <p className="text-muted-foreground">
-          Describe your business in a sentence — NovaCRM builds the rest.
+          Describe your business in a sentence — ValensCRM builds the rest.
         </p>
       </div>
 

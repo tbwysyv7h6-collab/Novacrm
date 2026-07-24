@@ -11,7 +11,7 @@ function getResend(): Resend | null {
 
 async function sendEmail(to: string, subject: string, html: string, text: string) {
   const resend = getResend();
-  const from = process.env.EMAIL_FROM ?? "NovaCRM <onboarding@resend.dev>";
+  const from = process.env.EMAIL_FROM ?? "ValensCRM <onboarding@resend.dev>";
 
   if (!resend) {
     console.log(`[mail] RESEND_API_KEY not set — logging instead of sending.`);
@@ -28,11 +28,11 @@ async function sendEmail(to: string, subject: string, html: string, text: string
 export async function sendPasswordResetEmail(email: string, resetUrl: string) {
   await sendEmail(
     email,
-    "Reset your NovaCRM password",
-    `<p>We received a request to reset your NovaCRM password.</p>
+    "Reset your ValensCRM password",
+    `<p>We received a request to reset your ValensCRM password.</p>
      <p><a href="${resetUrl}">Click here to choose a new password</a>. This link expires in 1 hour.</p>
      <p>If you didn't request this, you can safely ignore this email.</p>`,
-    `Reset your NovaCRM password: ${resetUrl} (expires in 1 hour)`,
+    `Reset your ValensCRM password: ${resetUrl} (expires in 1 hour)`,
   );
 }
 
@@ -43,10 +43,10 @@ export async function sendAutomationEmail(to: string, subject: string, body: str
 export async function sendVerificationEmail(email: string, verifyUrl: string) {
   await sendEmail(
     email,
-    "Verify your NovaCRM email address",
-    `<p>Thanks for signing up for NovaCRM!</p>
+    "Verify your ValensCRM email address",
+    `<p>Thanks for signing up for ValensCRM!</p>
      <p><a href="${verifyUrl}">Click here to verify your email address</a>.</p>`,
-    `Verify your NovaCRM email address: ${verifyUrl}`,
+    `Verify your ValensCRM email address: ${verifyUrl}`,
   );
 }
 

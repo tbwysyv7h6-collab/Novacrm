@@ -99,7 +99,7 @@ const CREATE_CRM_TOOL: Anthropic.Tool = {
   },
 };
 
-const SYSTEM_PROMPT = `You design data models for NovaCRM, a no-code CRM builder. Given a one-sentence description of a small business, call the create_crm_schema tool to define the objects and fields that business needs.
+const SYSTEM_PROMPT = `You design data models for ValensCRM, a no-code CRM builder. Given a one-sentence description of a small business, call the create_crm_schema tool to define the objects and fields that business needs.
 
 Rules:
 - Always include a customer/contact object (e.g. "Customers" or "Contacts") with fields like name, email, phone, address.

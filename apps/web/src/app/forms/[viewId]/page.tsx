@@ -42,7 +42,7 @@ export default async function PublicFormPage({
           <p className="mt-6 text-center text-xs text-muted-foreground">
             Powered by{" "}
             <a href="https://www.novacrm.uk" className="font-medium hover:underline">
-              NovaCRM
+              ValensCRM
             </a>
           </p>
         )}

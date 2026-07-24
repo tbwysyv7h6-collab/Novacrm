@@ -20,7 +20,7 @@ export function AutomationsSection() {
           Automations that run your business for you
         </h2>
         <p className="mt-4 text-muted-foreground">
-          Set up IF/THEN rules once — no coding required — and let NovaCRM handle
+          Set up IF/THEN rules once — no coding required — and let ValensCRM handle
           the busywork.
         </p>
       </div>

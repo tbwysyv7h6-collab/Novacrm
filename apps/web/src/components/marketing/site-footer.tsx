@@ -42,7 +42,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-2 gap-8 md:grid-cols-5">
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="text-lg font-semibold tracking-tight">
-              Nova<span className="text-primary">CRM</span>
+              Valens<span className="text-primary">CRM</span>
             </Link>
             <p className="mt-3 max-w-[20ch] text-sm text-muted-foreground">
               The easiest CRM builder in the world.
@@ -67,7 +67,7 @@ export function SiteFooter() {
           ))}
         </div>
         <div className="mt-12 flex flex-col gap-4 border-t border-border/60 pt-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} NovaCRM. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} ValensCRM. All rights reserved.</p>
           <p>Build a CRM. No code required.</p>
         </div>
       </div>

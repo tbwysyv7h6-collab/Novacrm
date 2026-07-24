@@ -7,7 +7,7 @@ import { DemoExplorer } from "./demo-explorer";
 
 export const metadata: Metadata = {
   title: "Live Demo",
-  description: "Explore a real NovaCRM workspace — no signup required.",
+  description: "Explore a real ValensCRM workspace — no signup required.",
 };
 
 export default async function DemoPage() {

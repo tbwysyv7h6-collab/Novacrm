@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "NovaCRM is built by a solo founder tired of watching small service businesses get squeezed into CRM software built for enterprise sales teams.",
+    "ValensCRM is built by a solo founder tired of watching small service businesses get squeezed into CRM software built for enterprise sales teams.",
   alternates: {
     canonical: "/about",
   },
@@ -19,19 +19,19 @@ export default function AboutPage() {
     <>
       <SiteHeader />
       <main className="mx-auto max-w-2xl px-6 py-20">
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">About NovaCRM</h1>
+        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">About ValensCRM</h1>
 
         <div className="mt-8 space-y-6 text-muted-foreground">
           <p>
             Most CRMs are built for enterprise sales teams, then squeezed to fit everyone else. A
             window cleaner, a plumber, an estate agent — none of them work the way a Fortune 500
-            sales floor does, but they&apos;re handed the same software anyway. NovaCRM starts
+            sales floor does, but they&apos;re handed the same software anyway. ValensCRM starts
             from the opposite direction: describe your business, or drag and drop the exact
             fields and pipelines you actually need, and get a CRM built around how you really
             work.
           </p>
           <p>
-            NovaCRM is built and run by me, Ethen Beyer, a sole trader based in England. I&apos;m
+            ValensCRM is built and run by me, Ethen Beyer, a sole trader based in England. I&apos;m
             not a large company with a support queue — I build the product, and I read every
             email that comes in through the{" "}
             <Link href="/contact" className="text-foreground underline underline-offset-4">

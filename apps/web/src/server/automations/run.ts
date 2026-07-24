@@ -51,7 +51,7 @@ async function runAction(action: AutomationAction, record: CrmRecord, object: Cr
   switch (action.type) {
     case "SEND_EMAIL": {
       const to = typeof config.to === "string" ? config.to : undefined;
-      const subject = typeof config.subject === "string" ? config.subject : "Notification from NovaCRM";
+      const subject = typeof config.subject === "string" ? config.subject : "Notification from ValensCRM";
       const body = typeof config.body === "string" ? config.body : "";
       if (to) await sendAutomationEmail(to, interpolate(subject, record), interpolate(body, record));
       break;

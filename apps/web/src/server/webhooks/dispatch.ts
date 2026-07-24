@@ -30,7 +30,7 @@ export async function dispatchWebhooks(
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "X-NovaCRM-Signature": sign(webhook.secret, payload),
+            "X-ValensCRM-Signature": sign(webhook.secret, payload),
           },
           body: payload,
           signal: AbortSignal.timeout(5000),

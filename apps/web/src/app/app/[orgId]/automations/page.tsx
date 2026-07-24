@@ -20,7 +20,7 @@ export default async function AutomationsPage({
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Automations</h1>
         <p className="text-muted-foreground">
-          IF something happens THEN NovaCRM takes care of it — no code required.
+          IF something happens THEN ValensCRM takes care of it — no code required.
         </p>
       </div>
       <AutomationsPanel organizationId={orgId} objects={objects} plan={organization.plan} />

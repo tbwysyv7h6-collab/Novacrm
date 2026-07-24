@@ -386,11 +386,11 @@ export function DemoExplorer({ organization }: { organization: OrganizationWithO
                 <div className="flex flex-col gap-2 rounded-lg border border-dashed p-3 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
                   <span>
                     Free plan: limited to {FREE_RECORD_LIMIT} records per table, and public forms
-                    show a small NovaCRM watermark.
+                    show a small ValensCRM watermark.
                   </span>
                   <span className="flex shrink-0 items-center gap-1 rounded-md border border-dashed px-2 py-1">
                     <ImageIcon className="size-3" />
-                    Powered by NovaCRM
+                    Powered by ValensCRM
                   </span>
                 </div>
               )}

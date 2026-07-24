@@ -21,7 +21,7 @@ export default function OpengraphImage() {
         }}
       >
         <div style={{ display: "flex", fontSize: 72, fontWeight: 700, color: "white" }}>
-          Nova<span style={{ color: "#818cf8" }}>CRM</span>
+          Valens<span style={{ color: "#818cf8" }}>CRM</span>
         </div>
         <div
           style={{
