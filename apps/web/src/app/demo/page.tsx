@@ -10,6 +10,12 @@ export const metadata: Metadata = {
   description: "Explore a real ValensCRM workspace — no signup required.",
 };
 
+// Force request-time rendering instead of build-time prerendering. Without
+// this, every production build queries the DB to prerender this page, and a
+// Neon free-tier cold start (DB asleep) fails the *entire* build, not just
+// this page.
+export const dynamic = "force-dynamic";
+
 export default async function DemoPage() {
   const organization = await prisma.organization.findUnique({
     where: { slug: "demo" },
