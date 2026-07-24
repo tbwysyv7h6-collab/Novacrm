@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 const links = [
-  { href: "#builder", label: "Builder" },
-  { href: "#ai", label: "AI Builder" },
-  { href: "#automations", label: "Automations" },
-  { href: "#pricing", label: "Pricing" },
+  { href: "/#builder", label: "Builder" },
+  { href: "/#ai", label: "AI Builder" },
+  { href: "/#automations", label: "Automations" },
+  { href: "/#pricing", label: "Pricing" },
 ];
 
 export function SiteHeader() {

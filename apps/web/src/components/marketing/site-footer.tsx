@@ -4,10 +4,10 @@ const columns = [
   {
     title: "Product",
     links: [
-      { href: "#builder", label: "Drag-and-drop builder" },
-      { href: "#ai", label: "AI CRM Builder" },
-      { href: "#automations", label: "Automations" },
-      { href: "#pricing", label: "Pricing" },
+      { href: "/#builder", label: "Drag-and-drop builder" },
+      { href: "/#ai", label: "AI CRM Builder" },
+      { href: "/#automations", label: "Automations" },
+      { href: "/#pricing", label: "Pricing" },
     ],
   },
   {
@@ -23,7 +23,6 @@ const columns = [
     title: "Company",
     links: [
       { href: "/about", label: "About" },
-      { href: "/blog", label: "Blog" },
       { href: "/contact", label: "Contact" },
     ],
   },
