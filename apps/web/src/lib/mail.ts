@@ -56,7 +56,7 @@ export async function sendContactRequestEmail(details: {
   businessName: string;
   message: string;
 }) {
-  const notifyTo = process.env.CONTACT_REQUEST_TO ?? "hello@novacrm.uk";
+  const notifyTo = process.env.CONTACT_REQUEST_TO ?? "hello@valenscrm.com";
   const text = `New contact request\n\nName: ${details.name}\nEmail: ${details.email}\nBusiness: ${details.businessName}\n\n${details.message}`;
   await sendEmail(
     notifyTo,

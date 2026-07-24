@@ -41,7 +41,7 @@ export default async function PublicFormPage({
         {view.object.organization.plan === "FREE" && (
           <p className="mt-6 text-center text-xs text-muted-foreground">
             Powered by{" "}
-            <a href="https://www.novacrm.uk" className="font-medium hover:underline">
+            <a href="https://www.valenscrm.com" className="font-medium hover:underline">
               ValensCRM
             </a>
           </p>

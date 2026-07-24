@@ -164,7 +164,7 @@ export default function TermsOfServicePage() {
       <LegalSection heading="16. Contact us">
         <p>
           Questions about these Terms? Email{" "}
-          <a href="mailto:hello@novacrm.uk">hello@novacrm.uk</a>.
+          <a href="mailto:hello@valenscrm.com">hello@valenscrm.com</a>.
         </p>
       </LegalSection>
     </LegalPage>

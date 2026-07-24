@@ -22,7 +22,7 @@ export default function PrivacyPolicyPage() {
           ValensCRM is operated by Ethen Beyer, trading as ValensCRM, a sole trader based in England
           and Wales at 19 Saint Johns Road, East Grinstead. If you have questions about this
           policy, contact us at{" "}
-          <a href="mailto:hello@novacrm.uk">hello@novacrm.uk</a>.
+          <a href="mailto:hello@valenscrm.com">hello@valenscrm.com</a>.
         </p>
       </LegalSection>
 
@@ -150,7 +150,7 @@ export default function PrivacyPolicyPage() {
         </ul>
         <p>
           To exercise any of these rights, email{" "}
-          <a href="mailto:hello@novacrm.uk">hello@novacrm.uk</a>. We will respond within one
+          <a href="mailto:hello@valenscrm.com">hello@valenscrm.com</a>. We will respond within one
           month, as required by law.
         </p>
       </LegalSection>
@@ -181,7 +181,7 @@ export default function PrivacyPolicyPage() {
       <LegalSection heading="13. Contact us">
         <p>
           Questions about this policy or how we handle your data? Email{" "}
-          <a href="mailto:hello@novacrm.uk">hello@novacrm.uk</a>.
+          <a href="mailto:hello@valenscrm.com">hello@valenscrm.com</a>.
         </p>
       </LegalSection>
     </LegalPage>
