@@ -63,12 +63,6 @@ function LoginForm() {
           >
             Continue with Google
           </Button>
-          <Button
-            variant="outline"
-            onClick={() => signIn("microsoft-entra-id", { callbackUrl })}
-          >
-            Continue with Microsoft
-          </Button>
         </div>
 
         <div className="relative text-center text-xs text-muted-foreground">

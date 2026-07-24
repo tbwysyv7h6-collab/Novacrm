@@ -65,12 +65,6 @@ export default function RegisterPage() {
           >
             Continue with Google
           </Button>
-          <Button
-            variant="outline"
-            onClick={() => signIn("microsoft-entra-id", { callbackUrl: "/app" })}
-          >
-            Continue with Microsoft
-          </Button>
         </div>
 
         <div className="relative text-center text-xs text-muted-foreground">
