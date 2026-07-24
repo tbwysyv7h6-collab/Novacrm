@@ -1,6 +1,7 @@
 import { prisma } from "@novacrm/db";
 import { SettingsNav } from "@/components/workspace/settings-nav";
 import { BrandingForm } from "@/components/workspace/branding-form";
+import { InvoicingSettingsForm } from "@/components/workspace/invoicing-settings-form";
 
 export default async function GeneralSettingsPage({
   params,
@@ -17,6 +18,10 @@ export default async function GeneralSettingsPage({
       <div>
         <h2 className="mb-4 text-lg font-medium">Branding</h2>
         <BrandingForm organization={organization} />
+      </div>
+      <div>
+        <h2 className="mb-4 text-lg font-medium">Invoicing details</h2>
+        <InvoicingSettingsForm organization={organization} />
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ import { automationRouter } from "./automation";
 import { aiRouter } from "./ai";
 import { billingRouter } from "./billing";
 import { webhookRouter } from "./webhook";
+import { invoiceRouter } from "./invoice";
 
 export const appRouter = router({
   organization: organizationRouter,
@@ -19,6 +20,7 @@ export const appRouter = router({
   ai: aiRouter,
   billing: billingRouter,
   webhook: webhookRouter,
+  invoice: invoiceRouter,
 });
 
 export type AppRouter = typeof appRouter;

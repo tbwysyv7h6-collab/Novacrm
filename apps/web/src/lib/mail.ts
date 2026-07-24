@@ -9,17 +9,28 @@ function getResend(): Resend | null {
   return resendClient;
 }
 
-async function sendEmail(to: string, subject: string, html: string, text: string) {
+type EmailAttachment = { filename: string; content: Buffer };
+
+async function sendEmail(
+  to: string,
+  subject: string,
+  html: string,
+  text: string,
+  attachments?: EmailAttachment[],
+) {
   const resend = getResend();
   const from = process.env.EMAIL_FROM ?? "ValensCRM <onboarding@resend.dev>";
 
   if (!resend) {
     console.log(`[mail] RESEND_API_KEY not set — logging instead of sending.`);
     console.log(`[mail] To: ${to}\nSubject: ${subject}\n${text}`);
+    if (attachments?.length) {
+      console.log(`[mail] Attachments: ${attachments.map((a) => a.filename).join(", ")}`);
+    }
     return;
   }
 
-  const { error } = await resend.emails.send({ from, to, subject, html, text });
+  const { error } = await resend.emails.send({ from, to, subject, html, text, attachments });
   if (error) {
     console.error(`[mail] Failed to send "${subject}" to ${to}:`, error);
   }
@@ -47,6 +58,29 @@ export async function sendVerificationEmail(email: string, verifyUrl: string) {
     `<p>Thanks for signing up for ValensCRM!</p>
      <p><a href="${verifyUrl}">Click here to verify your email address</a>.</p>`,
     `Verify your ValensCRM email address: ${verifyUrl}`,
+  );
+}
+
+export async function sendInvoiceEmail(details: {
+  to: string;
+  businessName: string;
+  invoiceNumber: string;
+  total: number;
+  dueAt: Date | null;
+  pdfBuffer: Buffer;
+}) {
+  const dueText = details.dueAt
+    ? details.dueAt.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
+    : null;
+  const text = `Invoice ${details.invoiceNumber} from ${details.businessName}\n\nAmount due: £${details.total.toFixed(2)}${dueText ? `\nDue: ${dueText}` : ""}\n\nSee the attached PDF for full details.`;
+  await sendEmail(
+    details.to,
+    `Invoice ${details.invoiceNumber} from ${details.businessName}`,
+    `<p>You have a new invoice from <strong>${details.businessName}</strong>.</p>
+     <p>Amount due: <strong>£${details.total.toFixed(2)}</strong>${dueText ? `<br />Due: ${dueText}` : ""}</p>
+     <p>See the attached PDF for full details.</p>`,
+    text,
+    [{ filename: `${details.invoiceNumber}.pdf`, content: details.pdfBuffer }],
   );
 }
 

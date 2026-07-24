@@ -80,25 +80,39 @@ enum MembershipRole {
 // An Organization is a tenant: one customer's workspace, containing exactly
 // the CRM(s) they've built. Every dynamic-engine row below is scoped to one.
 model Organization {
-  id        String   @id @default(cuid())
-  name      String
-  slug      String   @unique
-  logoUrl   String?
+  id         String  @id @default(cuid())
+  name       String
+  slug       String  @unique
+  logoUrl    String?
   brandColor String? @default("#6366f1")
 
-  plan               PlanTier @default(FREE)
-  stripeCustomerId   String?  @unique
-  stripeSubscriptionId String? @unique
-  stripePriceId      String?
+  plan                   PlanTier  @default(FREE)
+  stripeCustomerId       String?   @unique
+  stripeSubscriptionId   String?   @unique
+  stripePriceId          String?
   stripeCurrentPeriodEnd DateTime?
+
+  // Invoicing — the tenant's own business details shown on their invoice
+  // headers (separate from ValensCRM's own legal entity info).
+  invoiceCounter  Int     @default(0) // atomically incremented for sequential invoice numbers
+  businessAddress String?
+  vatNumber       String?
+
+  // Appointment booking
+  appointmentDurationMinutes Int @default(60)
+  bookingWindowDays          Int @default(14)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  memberships Membership[]
-  objects     CrmObject[]
-  webhooks    Webhook[]
-  auditLogs   AuditLog[]
+  memberships        Membership[]
+  objects            CrmObject[]
+  webhooks           Webhook[]
+  auditLogs          AuditLog[]
+  invoices           Invoice[]
+  availabilityRules  AvailabilityRule[]
+  availabilityBlocks AvailabilityBlock[]
+  appointments       Appointment[]
 
   @@index([stripeCustomerId])
 }
@@ -169,7 +183,7 @@ model CrmObject {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   fields       CrmField[]
   records      CrmRecord[]
   views        CrmView[]
@@ -279,4 +293,132 @@ model AuditLog {
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@index([organizationId, createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Invoicing
+//
+// Unlike the dynamic object engine above, invoices are first-class tables:
+// they need decimal-precision money math, sequential legal numbering, and
+// customer details snapshotted at issue time (so editing a linked Customer
+// record later doesn't retroactively change an invoice that's already gone
+// out). An invoice may optionally reference a CrmRecord (e.g. the Job or
+// Customer it's for) as a soft link — not a hard foreign key, since that
+// record could later be deleted without invalidating the invoice.
+// ---------------------------------------------------------------------------
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  VOID
+}
+
+model Invoice {
+  id             String        @id @default(cuid())
+  organizationId String
+  number         String // e.g. "INV-0001", sequential per org via Organization.invoiceCounter
+  status         InvoiceStatus @default(DRAFT)
+
+  // Snapshotted at issue time — not linked live to a CrmRecord.
+  customerName    String
+  customerEmail   String?
+  customerAddress String?
+  crmRecordId     String? // optional soft link to the Customer/Job record this is for
+
+  subtotal  Decimal @db.Decimal(10, 2)
+  vatAmount Decimal @db.Decimal(10, 2)
+  total     Decimal @db.Decimal(10, 2)
+
+  notes    String?
+  issuedAt DateTime?
+  dueAt    DateTime?
+  paidAt   DateTime?
+
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  organization Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  lineItems    InvoiceLineItem[]
+
+  @@unique([organizationId, number])
+  @@index([organizationId])
+}
+
+model InvoiceLineItem {
+  id          String  @id @default(cuid())
+  invoiceId   String
+  description String
+  quantity    Decimal @default(1) @db.Decimal(10, 2)
+  unitPrice   Decimal @db.Decimal(10, 2)
+  vatRate     Decimal @default(20) @db.Decimal(5, 2) // percentage, e.g. 20.00
+  lineTotal   Decimal @db.Decimal(10, 2) // quantity * unitPrice, before VAT
+  position    Int     @default(0)
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
+}
+
+// ---------------------------------------------------------------------------
+// Appointment booking
+//
+// Also first-class: a public, unauthenticated booking flow needs a real
+// DB-level guarantee against double-booking, which the JSONB dynamic-record
+// engine can't provide on its own. Appointment slots are always aligned to
+// Organization.appointmentDurationMinutes, so @@unique([organizationId,
+// startsAt]) is sufficient to make a double-booking a clean constraint
+// violation rather than a check-then-insert race condition.
+// ---------------------------------------------------------------------------
+
+model AvailabilityRule {
+  id             String @id @default(cuid())
+  organizationId String
+  dayOfWeek      Int // 0 = Sunday .. 6 = Saturday
+  startTime      String // "HH:mm", organization's local time
+  endTime        String // "HH:mm"
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+}
+
+model AvailabilityBlock {
+  id             String   @id @default(cuid())
+  organizationId String
+  date           DateTime @db.Date
+  reason         String?
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+}
+
+enum AppointmentStatus {
+  CONFIRMED
+  CANCELLED
+}
+
+model Appointment {
+  id             String            @id @default(cuid())
+  organizationId String
+  startsAt       DateTime
+  endsAt         DateTime
+  status         AppointmentStatus @default(CONFIRMED)
+
+  customerName  String
+  customerEmail String
+  customerPhone String?
+  notes         String?
+  crmRecordId   String? // optional soft link to a Customer/Job record
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, startsAt])
+  @@index([organizationId, startsAt])
 }

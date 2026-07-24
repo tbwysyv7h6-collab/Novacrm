@@ -66,6 +66,8 @@ export const organizationRouter = router({
           .string()
           .regex(/^#[0-9a-fA-F]{6}$/)
           .optional(),
+        businessAddress: z.string().trim().max(500).optional(),
+        vatNumber: z.string().trim().max(30).optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -77,6 +79,10 @@ export const organizationRouter = router({
           ...(data.name && { name: data.name }),
           ...(data.logoUrl !== undefined && { logoUrl: data.logoUrl || null }),
           ...(data.brandColor && { brandColor: data.brandColor }),
+          ...(data.businessAddress !== undefined && {
+            businessAddress: data.businessAddress || null,
+          }),
+          ...(data.vatNumber !== undefined && { vatNumber: data.vatNumber || null }),
         },
       });
       await logAudit({

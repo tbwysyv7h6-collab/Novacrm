@@ -27,6 +27,8 @@ import {
   Database,
   ChevronLeft,
   Menu,
+  Receipt,
+  CalendarClock,
 } from "lucide-react";
 import { trpc } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
@@ -45,6 +47,8 @@ import type { CrmObject, Organization } from "@novacrm/db";
 
 const navItems = (orgId: string) => [
   { href: `/app/${orgId}`, label: "Dashboard", icon: LayoutDashboard },
+  { href: `/app/${orgId}/invoices`, label: "Invoices", icon: Receipt },
+  { href: `/app/${orgId}/appointments`, label: "Appointments", icon: CalendarClock },
   { href: `/app/${orgId}/automations`, label: "Automations", icon: Workflow },
   { href: `/app/${orgId}/settings`, label: "Settings", icon: Settings },
 ];
