@@ -5,29 +5,16 @@ import { trpc } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { PLANS as ALL_PLANS } from "@/lib/plans";
 import type { Organization } from "@novacrm/db";
 
-const PLANS = [
-  {
-    plan: "STARTER" as const,
-    name: "Starter",
-    price: "£19/mo",
-    features: ["Unlimited records", "Remove branding", "Basic automations", "Email support"],
-  },
-  {
-    plan: "PRO" as const,
-    name: "Pro",
-    price: "£49/mo",
-    features: ["Multiple CRMs", "Advanced automations", "Team collaboration", "API access", "Integrations"],
-    highlighted: true,
-  },
-  {
-    plan: "BUSINESS" as const,
-    name: "Business",
-    price: "£99/mo",
-    features: ["Unlimited users", "Advanced permissions", "White label", "Priority support", "Advanced analytics"],
-  },
-];
+const PLANS = ALL_PLANS.filter((plan) => plan.tier !== "FREE").map((plan) => ({
+  plan: plan.tier,
+  name: plan.name,
+  price: `${plan.price}${plan.period}`,
+  features: plan.features,
+  highlighted: plan.highlighted,
+}));
 
 export function BillingPanel({ organization }: { organization: Organization }) {
   const checkout = trpc.billing.createCheckoutSession.useMutation({
