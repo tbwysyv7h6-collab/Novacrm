@@ -9,6 +9,7 @@ import { aiRouter } from "./ai";
 import { billingRouter } from "./billing";
 import { webhookRouter } from "./webhook";
 import { invoiceRouter } from "./invoice";
+import { appointmentRouter } from "./appointment";
 
 export const appRouter = router({
   organization: organizationRouter,
@@ -21,6 +22,7 @@ export const appRouter = router({
   billing: billingRouter,
   webhook: webhookRouter,
   invoice: invoiceRouter,
+  appointment: appointmentRouter,
 });
 
 export type AppRouter = typeof appRouter;

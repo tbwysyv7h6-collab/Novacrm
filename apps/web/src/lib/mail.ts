@@ -84,6 +84,50 @@ export async function sendInvoiceEmail(details: {
   );
 }
 
+function formatAppointmentTime(date: Date): string {
+  return date.toLocaleString("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+export async function sendBookingConfirmationEmail(details: {
+  to: string;
+  businessName: string;
+  startsAt: Date;
+}) {
+  const when = formatAppointmentTime(details.startsAt);
+  await sendEmail(
+    details.to,
+    `Booking confirmed with ${details.businessName}`,
+    `<p>Your appointment with <strong>${details.businessName}</strong> is confirmed.</p>
+     <p><strong>${when}</strong></p>`,
+    `Your appointment with ${details.businessName} is confirmed for ${when}.`,
+  );
+}
+
+export async function sendBookingNotificationEmail(details: {
+  to: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string | null;
+  startsAt: Date;
+}) {
+  const when = formatAppointmentTime(details.startsAt);
+  await sendEmail(
+    details.to,
+    `New booking: ${details.customerName} — ${when}`,
+    `<p><strong>New appointment booked</strong></p>
+     <p>${when}</p>
+     <p>Name: ${details.customerName}<br />
+     Email: ${details.customerEmail}${details.customerPhone ? `<br />Phone: ${details.customerPhone}` : ""}</p>`,
+    `New appointment booked for ${when}\nName: ${details.customerName}\nEmail: ${details.customerEmail}${details.customerPhone ? `\nPhone: ${details.customerPhone}` : ""}`,
+  );
+}
+
 export async function sendContactRequestEmail(details: {
   name: string;
   email: string;
