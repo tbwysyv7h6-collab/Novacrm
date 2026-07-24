@@ -34,7 +34,12 @@ export const PLANS = [
     price: "£49",
     period: "/month",
     description: "For growing service businesses.",
-    features: ["14-day free trial", "Everything in Starter", "Integrations & webhooks"],
+    features: [
+      "14-day free trial",
+      "Everything in Starter",
+      "Integrations & webhooks",
+      "Invite your team",
+    ],
     cta: "Start with Pro",
     href: "/register?plan=pro",
     highlighted: true,

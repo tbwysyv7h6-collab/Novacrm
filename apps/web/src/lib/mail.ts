@@ -51,6 +51,21 @@ export async function sendAutomationEmail(to: string, subject: string, body: str
   await sendEmail(to, subject, `<p>${body.replace(/\n/g, "<br />")}</p>`, body);
 }
 
+export async function sendInviteEmail(
+  email: string,
+  inviteUrl: string,
+  orgName: string,
+  inviterName: string,
+) {
+  await sendEmail(
+    email,
+    `${inviterName} invited you to join ${orgName} on ValensCRM`,
+    `<p><strong>${inviterName}</strong> has invited you to join <strong>${orgName}</strong> on ValensCRM.</p>
+     <p><a href="${inviteUrl}">Click here to accept the invite</a>. This link expires in 7 days.</p>`,
+    `${inviterName} invited you to join ${orgName} on ValensCRM: ${inviteUrl} (expires in 7 days)`,
+  );
+}
+
 export async function sendVerificationEmail(email: string, verifyUrl: string) {
   await sendEmail(
     email,

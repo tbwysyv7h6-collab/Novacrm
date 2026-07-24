@@ -12,6 +12,7 @@ const registerSchema = z.object({
   email: z.string().trim().toLowerCase().email(),
   password: z.string().min(8).max(72),
   businessName: z.string().trim().max(100).optional(),
+  inviteToken: z.string().optional(),
 });
 
 async function uniqueOrgSlug(base: string): Promise<string> {
@@ -42,7 +43,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const { name, email, password, businessName } = parsed.data;
+  const { name, email, password, businessName, inviteToken } = parsed.data;
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
@@ -53,6 +54,32 @@ export async function POST(request: Request) {
   }
 
   const passwordHash = await bcrypt.hash(password, 12);
+
+  if (inviteToken) {
+    const invite = await prisma.organizationInvite.findUnique({ where: { token: inviteToken } });
+    if (!invite || invite.acceptedAt || invite.expires < new Date() || invite.email !== email) {
+      return NextResponse.json(
+        { error: "This invite is invalid or has expired." },
+        { status: 400 },
+      );
+    }
+
+    await prisma.$transaction([
+      prisma.user.create({
+        data: {
+          name,
+          email,
+          passwordHash,
+          emailVerified: new Date(), // clicking the mailed invite link already proves inbox ownership
+          memberships: { create: { role: invite.role, organizationId: invite.organizationId } },
+        },
+      }),
+      prisma.organizationInvite.update({ where: { id: invite.id }, data: { acceptedAt: new Date() } }),
+    ]);
+
+    return NextResponse.json({ ok: true });
+  }
+
   const orgName = businessName?.trim() || `${name}'s Workspace`;
   const slug = await uniqueOrgSlug(orgName);
 

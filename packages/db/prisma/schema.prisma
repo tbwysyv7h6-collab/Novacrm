@@ -113,8 +113,29 @@ model Organization {
   availabilityRules  AvailabilityRule[]
   availabilityBlocks AvailabilityBlock[]
   appointments       Appointment[]
+  invites            OrganizationInvite[]
 
   @@index([stripeCustomerId])
+}
+
+// A pending team invite. Deliberately separate from Membership (which only
+// represents an already-accepted relationship) so an invite can be tracked,
+// resent, or revoked before anyone joins.
+model OrganizationInvite {
+  id             String         @id @default(cuid())
+  organizationId String
+  email          String
+  role           MembershipRole // ADMIN | MEMBER | VIEWER — never OWNER
+  token          String         @unique
+  invitedById    String
+  expires        DateTime
+  acceptedAt     DateTime?
+  createdAt      DateTime       @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, email])
+  @@index([organizationId])
 }
 
 model Membership {
